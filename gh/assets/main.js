@@ -1190,8 +1190,9 @@ function create_topojson_layer(dataset) {
             });*/
             //CUSTOM ICON TEST DEBUG DEBUG DEBUG
             var smallIcon = new L.icon({
-                iconUrl: '/gh/assets/icons/army.svg',
-                iconSize:[50, 65]
+                iconUrl: 'http://austinmoffa.github.io/gh/assets/icons/army.svg',
+                iconSize:[30, 44],
+                iconAnchor: [15, 44]
             });
             return L.marker(latlng, {icon: smallIcon});
         };

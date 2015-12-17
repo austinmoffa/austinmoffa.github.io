@@ -1190,7 +1190,7 @@ function create_topojson_layer(dataset) {
             });*/
             //CUSTOM ICON TEST DEBUG DEBUG DEBUG
             var smallIcon = new L.icon({
-                iconUrl: '/assets/icons/army.svg',
+                iconUrl: '/gh/assets/icons/army.svg',
                 iconSize:[50, 65]
             });
             return L.marker(latlng, {icon: smallIcon});

@@ -810,7 +810,6 @@ function createDescriptionTooltip(dataset, p) {
 function adjustLayerTooltipDisplay(el) {
     if (tooltipIsNearTheBottomEdge(el)) {
         el.css('top', (-el.height() - parseInt(el.css('top'))) + 'px');
-        console.log(el.css('top'));
         el.data('height-adjusted', true);
     }
     
@@ -819,7 +818,8 @@ function adjustLayerTooltipDisplay(el) {
 function tooltipIsNearTheBottomEdge(el) {
     var w_height = $(window).height();
     var el_offset = el.offset();
-    if (el_offset.top + el.height() > w_height) {
+    var el_height = el_offset.top + el.height() + 50; //arbitrary for margin of error
+    if (el_height > w_height) {
         return true;
     }
     return false;

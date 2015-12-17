@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 12.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_svg "http://www.w3.org/2000/svg">
+	<!ENTITY ns_xlink "http://www.w3.org/1999/xlink">
+]>
+<svg  version="1.1"
+	 id="svg2" sodipodi:docname="squat-marker-purple.svg" inkscape:export-xdpi="90" inkscape:export-ydpi="90" inkscape:version="0.48.1 " inkscape:export-filename="C:\Users\Luke\Desktop\map-markers\squat-marker-yellow.png" xmlns:svg="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:ns1="http://sozi.baierouge.fr" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	 xmlns="&ns_svg;" xmlns:xlink="&ns_xlink;" width="25" height="39" viewBox="0 0 25 39"
+	 overflow="visible" enable-background="new 0 0 25 39" xml:space="preserve">
+<sodipodi:namedview  id="base" inkscape:window-height="1018" inkscape:current-layer="layer1" inkscape:window-width="1920" inkscape:pageopacity="0.0" inkscape:snap-global="false" inkscape:window-x="-8" inkscape:pageshadow="2" inkscape:window-y="-8" inkscape:window-maximized="0" borderopacity="1.0" inkscape:document-units="px" showgrid="true" inkscape:zoom="21.839295" bordercolor="#666666" inkscape:cx="-1.7861754" pagecolor="#ffffff" inkscape:cy="18.168488">
+	
+		<inkscape:grid  type="xygrid" units="px" id="grid2985" snapvisiblegridlinesonly="true" spacingx="0.5px" enabled="true" spacingy="0.5px" empspacing="5" visible="true">
+		</inkscape:grid>
+</sodipodi:namedview>
+<g id="layer1" transform="translate(0 -1013.4)" inkscape:groupmode="layer" inkscape:label="Layer 1">
+	
+		<path id="path2987" sodipodi:nodetypes="sscccss" inkscape:transform-center-y="5.46875" inkscape:connector-curvature="0" inkscape:transform-center-x="0.15624996" fill="#FFFFFF" stroke="#000000" d="
+		M-36.7,638.7c-141.4,0-256,114.4-256,255.6c0,101.2,59.3,188.5,144.7,229.9l111.3,304.2c41.4-101,78.8-203.5,115.5-306.3
+		c83.1-42.2,140.5-128.3,140.5-227.8C219.3,753.1,104.7,638.7-36.7,638.7L-36.7,638.7z"/>
+	
+		<radialGradient id="path3769_3_" cx="-207.6226" cy="1413.1959" r="83.0271" gradientTransform="matrix(2.8074 1.178443e-002 1.188351e-002 -2.831 529.346 4682.0015)" gradientUnits="userSpaceOnUse">
+		<stop  offset="0" style="stop-color:#9C00FF"/>
+		<stop  offset="1" style="stop-color:#9C00FF"/>
+	</radialGradient>
+	
+		<path id="path3769" sodipodi:cy="11.5" sodipodi:rx="9.4642859" sodipodi:ry="9.4642859" sodipodi:type="arc" sodipodi:cx="12.5" fill="url(#path3769_3_)" d="
+		M186.5,895c0,123.3-100,223.3-223.3,223.3c-123.3,0-223.3-100-223.3-223.3c0-123.3,100-223.3,223.3-223.3
+		C86.6,671.8,186.5,771.7,186.5,895z"/>
+</g>
+</svg>

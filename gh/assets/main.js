@@ -1184,9 +1184,14 @@ function create_topojson_layer(dataset) {
     if (dataset.type === "regions" || dataset.type === "points") {
         newLayer.setStyle(dataset.style);
         newLayer.options.pointToLayer = function(feature, latlng) {
-            var smallIcon = L.VectorMarkers.icon({
+            /*var smallIcon = L.VectorMarkers.icon({
                 icon: 'circle',
                 markerColor: dataset.style.color
+            });*/
+            //CUSTOM ICON TEST DEBUG DEBUG DEBUG
+            var smallIcon = L.icon({
+                iconUrl: '/icons/army.svg',
+                iconSize:[50, 65]
             });
             return L.marker(latlng, {icon: smallIcon});
         };

@@ -1189,8 +1189,8 @@ function create_topojson_layer(dataset) {
                 markerColor: dataset.style.color
             });*/
             //CUSTOM ICON TEST DEBUG DEBUG DEBUG
-            var smallIcon = L.icon({
-                iconUrl: '/icons/army.svg',
+            var smallIcon = new L.icon({
+                iconUrl: '/assets/icons/army.svg',
                 iconSize:[50, 65]
             });
             return L.marker(latlng, {icon: smallIcon});

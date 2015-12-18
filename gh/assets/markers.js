@@ -14,21 +14,21 @@ var Markers = {
             if (!color) {
                 return this.marker_array.default;
             } else {
-                return this.getDefaultCustomColor(color);
+                return this.getReplaceDefaultColor(color, '#4dea51');
             }
         }
     },
-    getDefaultCustomColor: function(color) {
-        if (!this.marker_array.color[color]) { //only do this once for each color each load
-            var ret = this.marker_array.default.options.html.replace('#4dea51', color);
-            this.marker_array.color[color] = new L.divIcon({
+    getReplaceDefaultColor: function(newcolor, defaultcolor) {
+        if (!this.marker_array.color[newcolor]) { //only do this once for each color each load
+            var ret = this.marker_array.default.options.html.replace(defaultcolor, newcolor);
+            this.marker_array.color[newcolor] = new L.divIcon({
                 html: ret,
                 iconSize: this.marker_array.default.options.iconSize,
                 iconAnchor: this.marker_array.default.options.iconAnchor,
                 className: this.marker_array.default.options.className,
             });
         }
-        return this.marker_array.color[color];
+        return this.marker_array.color[newcolor];
     },
 
 };

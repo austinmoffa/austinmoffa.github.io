@@ -1184,17 +1184,8 @@ function create_topojson_layer(dataset) {
     if (dataset.type === "regions" || dataset.type === "points") {
         newLayer.setStyle(dataset.style);
         newLayer.options.pointToLayer = function(feature, latlng) {
-            /*var smallIcon = L.VectorMarkers.icon({
-                icon: 'circle',
-                markerColor: dataset.style.color
-            });*/
-            //CUSTOM ICON TEST DEBUG DEBUG DEBUG
-            var smallIcon = new L.icon({
-                iconUrl: 'http://austinmoffa.github.io/gh/assets/icons/army.svg',
-                iconSize:[30, 44],
-                iconAnchor: [15, 44]
-            });
-            return L.marker(latlng, {icon: smallIcon});
+            smallIcon = Markers.getMarker('default', dataset.style.color);
+            return L.marker(latlng,{icon: smallIcon});
         };
     }
     newLayer.on("mouseover", function(e) {

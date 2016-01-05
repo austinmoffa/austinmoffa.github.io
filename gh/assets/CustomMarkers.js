@@ -1,4 +1,4 @@
-var Markers = {
+var CustomMarkers = {
     marker_array:  { //private list of icons, not meant for direct access
         default: new L.divIcon({
         //iconUrl: 'http://austinmoffa.github.io/gh/assets/images/icons/marker-default.svg',
@@ -16,6 +16,8 @@ var Markers = {
             } else {
                 return this.getReplaceDefaultColor(color, '#4dea51');
             }
+        } else {
+            return this.getCustomMarker(name);
         }
     },
     getReplaceDefaultColor: function(newcolor, defaultcolor) {
@@ -30,5 +32,18 @@ var Markers = {
         }
         return this.marker_array.color[newcolor];
     },
+
+    getCustomMarker: function(name) {
+        if (!this.marker_array[name]) {
+            this.marker_array[name] = new L.Icon({
+                iconUrl: 'http://austinmoffa.github.io/gh/assets/images/icons/' + name  + '.svg',
+                iconSize:[14, 34],
+                iconAnchor: [7, 26],
+                className: 'leaflet-' + name + '-custom-marker',
+            });
+        }
+
+        return this.marker_array[name];
+    }
 
 };

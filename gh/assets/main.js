@@ -1,4 +1,4 @@
-/********************************
+/*******************************
  * Global variables/constants
  */
 var data_obj, map_params, numDatasets, layerOrdering, choropleths;
@@ -1184,7 +1184,12 @@ function create_topojson_layer(dataset) {
     if (dataset.type === "regions" || dataset.type === "points") {
         newLayer.setStyle(dataset.style);
         newLayer.options.pointToLayer = function(feature, latlng) {
-            smallIcon = Markers.getMarker('default', dataset.style.color);
+                var possible_icons = ['airforce', 'hospital', 'navy-red', 'navy-green', 'navy-orange', 'army', 'airport', 'fire', 'default'];
+                var icon_name = Math.floor(Math.random() * possible_icons.length);
+                icon_name = possible_icons[icon_name];
+
+            smallIcon = CustomMarkers.getMarker(icon_name, dataset.style.color);
+            console.log(smallIcon);
             return L.marker(latlng,{icon: smallIcon});
         };
     }

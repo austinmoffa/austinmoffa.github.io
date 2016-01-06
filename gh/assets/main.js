@@ -1189,7 +1189,6 @@ function create_topojson_layer(dataset) {
                 icon_name = possible_icons[icon_name];
 
             smallIcon = CustomMarkers.getMarker(icon_name, dataset.style.color);
-            console.log(smallIcon);
             return L.marker(latlng,{icon: smallIcon});
         };
     }

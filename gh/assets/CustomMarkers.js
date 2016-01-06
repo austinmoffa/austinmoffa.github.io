@@ -37,8 +37,7 @@ var CustomMarkers = {
         if (!this.marker_array[name]) {
             this.marker_array[name] = new L.Icon({
                 iconUrl: 'http://austinmoffa.github.io/gh/assets/images/icons/' + name  + '.svg',
-                iconSize:[14, 34],
-                iconAnchor: [7, 26],
+                iconAnchor: [10, 40], //assuming our icons are set internally as 20x40
                 className: 'leaflet-' + name + '-custom-marker',
             });
         }

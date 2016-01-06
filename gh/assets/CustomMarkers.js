@@ -35,7 +35,7 @@ var CustomMarkers = {
     getCustomMarker: function(name) {
         if (!this.marker_array[name]) {
             this.marker_array[name] = new L.Icon({
-                iconUrl: '/assets/images/icons/' + name  + '.svg',
+                iconUrl: 'assets/images/icons/' + name  + '.svg',
                 iconAnchor: [10, 40], //assuming our icons are set internally as 20x40
                 className: 'leaflet-' + name + '-custom-marker',
             });

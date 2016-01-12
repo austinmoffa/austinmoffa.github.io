@@ -1,7 +1,20 @@
+var MaxMapLayerHelper = (function() {
+    var queryParams, providers, base_layers, map, data_obj, map_params;
+
+    var initSharedVars = function() { //convenience function
+        queryParams = MaxMap.shared.queryParams;
+        providers = MaxMap.providers;
+        base_layers = MaxMap.shared.base_layers;
+        map = MaxMap.shared.map;
+        data_obj = MaxMap.shared.data_obj;
+        map_params = MaxMap.shared.map_params;
+    }
+
+
 /********************************
  * Layer control tooltip function
  */
-function addPopupActionsToLayersControlLayerTitles(data_obj, map_params) {
+var addPopupActionsToLayersControlLayerTitles = function (data_obj, map_params) {
     var layerSlugs = {};
     for (var slug in data_obj) {
         if (data_obj.hasOwnProperty(slug)) {
@@ -104,7 +117,7 @@ function reorderLayers() {
     }
 }
 
-function setLayerControlHeight(e) {
+var setLayerControlHeight = function (e) {
     var controlHeight = map.getSize().y-50;
     var cssString = ".leaflet-control-layers-expanded { max-height: "
         + controlHeight.toString() + "px; }";
@@ -115,4 +128,10 @@ function getSummaryOverlays() {
     return map.summaryOverlays;
 }
 
+    return {
+        setLayerControlHeight: setLayerControlHeight,
+        addPopupActionsToLayersControlLayerTitles:addPopupActionsToLayersControlLayerTitles,
+        initSharedVars: initSharedVars,
+    };
 
+})();

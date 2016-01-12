@@ -1,0 +1,43 @@
+//global config/vars
+
+var MaxMap = (function() {
+    var providers = {};
+    var shared= {
+        //map, etc
+    //var data_obj, map_params, numDatasets, layerOrdering, choropleths;
+    //var queryParams;
+    //var overlayCount = 0;
+    //base_layers
+        overlayCount: 0,
+    };
+
+    var getProviders = function() {
+        return providers;
+    }
+
+    var init = function () {
+        this.providers =  {
+            //choropleth: MaxMapChloroplethProvider,
+            data: MaxMapDataProvider,
+            display: MaxMapDisplayHelper,
+            driver: MaxMapDriver,
+            layers: MaxMapLayerHelper,
+            map: MaxMapLeaflet,
+            //polygon: MaxMapPolygon,
+            query: MaxMapQueryParser
+        };
+        this.providers.driver.init();
+    }
+
+
+    return {
+        providers: providers,
+        shared: shared,
+        init: init,
+    }
+
+})();
+
+MaxMap.init();
+
+

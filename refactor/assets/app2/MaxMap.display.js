@@ -52,7 +52,7 @@ var MaxMapDisplayHelper = (function() {
     /********************************
      * Regions/points display helper functions
      */
-    function createColorBoxCSS(dataset) {
+    var createColorBoxCSS = function(dataset) {
         if (dataset.hasOwnProperty("style") && dataset.style.hasOwnProperty("color")) {
             var rgb_color = hexToRgb(dataset.style.color);
             var cssString = ".colorbox-" + dataset.slug;
@@ -84,7 +84,7 @@ var MaxMapDisplayHelper = (function() {
     /********************************
      * Initiative display functions
      */
-    function getStyledInitiativeLabel(dataset, where, linked) {
+    var getStyledInitiativeLabel = function(dataset, where, linked) {
         linked = typeof linked !== 'undefined' ? linked : false; // default to no link
         var colorBoxDiv = getColorBoxDiv(dataset, where);
         var styledLabel = $("<span>");
@@ -470,5 +470,8 @@ var MaxMapDisplayHelper = (function() {
         initSharedVars: initSharedVars,
         displayPopup:displayPopup,
         getLayerCategoryLabel: getLayerCategoryLabel,
+        createColorBoxCSS: createColorBoxCSS,
+        getStyledInitiativeLabel: getStyledInitiativeLabel,
+        setupMapControls: setupMapControls,
     };
                           })();

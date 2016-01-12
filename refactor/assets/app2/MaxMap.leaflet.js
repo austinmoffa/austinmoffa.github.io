@@ -1,3 +1,4 @@
+"use strict";
 var MaxMapLeaflet = (function() {
     var queryParams, providers, base_layers, map, data_obj, map_params;
 
@@ -20,6 +21,32 @@ var MaxMapLeaflet = (function() {
         }); // add attribution control after adding disclaimer control below
     }
 
+    var createLayerControls = function() {
+        queryParams = MaxMap.shared.queryParams;
+        providers = MaxMap.providers;
+        map = MaxMap.shared.map;
+        base_layers = MaxMap.shared.base_layers;
+        if (!queryParams.report) {
+            // Create layers control and add base map to control
+            var overlay_groups = {};
+            overlay_groups[providers.display.getLayerCategoryLabel("summary")] = {};
+            overlay_groups[providers.display.getLayerCategoryLabel("initiative")] = {};
+            overlay_groups[providers.display.getLayerCategoryLabel("baseline")] = {};
+            return L.control.groupedLayers(
+                base_layers, overlay_groups, { exclusiveGroups: [] });
+                layerControl.addTo(map);
+                // For accessibility
+                $("a.leaflet-control-layers-toggle")
+                .prop("title","What's on this map? (Data layers legend and layer information)")
+                .append("<span>What's on this map?</span>");
+                $(".leaflet-control-layers-toggle").on("mouseover", providers.layers.setLayerControlHeight)
+                .on("focus", providers.layers.setLayerControlHeight)
+                .on("touchstart", providers.layers.setLayerControlHeight);
+        }
+
+
+    }
+
     var configMap = function() {
         if (queryParams.hasBoundingBox) {
             map.fitBounds([[queryParams.SWlat, queryParams.SWlon],
@@ -32,24 +59,6 @@ var MaxMapLeaflet = (function() {
         // Create lists of choropleth overlay layers (to be populated as data is loaded)
         map.summaryOverlays = [];
         map.baselineChoropleths = [];
-
-        if (!queryParams.report) {
-            // Create layers control and add base map to control
-            var overlay_groups = {};
-            overlay_groups[providers.display.getLayerCategoryLabel("summary")] = {};
-            overlay_groups[providers.display.getLayerCategoryLabel("initiative")] = {};
-            overlay_groups[providers.display.getLayerCategoryLabel("baseline")] = {};
-            var layerControl = L.control.groupedLayers(
-                base_layers, overlay_groups, { exclusiveGroups: [] });
-                layerControl.addTo(map);
-                // For accessibility
-                $("a.leaflet-control-layers-toggle")
-                .prop("title","What's on this map? (Data layers legend and layer information)")
-                .append("<span>What's on this map?</span>");
-                $(".leaflet-control-layers-toggle").on("mouseover", providers.layers.setLayerControlHeight)
-                .on("focus", providers.layers.setLayerControlHeight)
-                .on("touchstart", providers.layers.setLayerControlHeight);
-        }
 
         // Add map event handlers
         map.on("overlayadd", function(e) {
@@ -135,6 +144,7 @@ var MaxMapLeaflet = (function() {
 
     }
     return {
+        createLayerControls: createLayerControls,
         createMap: createMap,
         configMap: configMap,
         initSharedVars: initSharedVars,

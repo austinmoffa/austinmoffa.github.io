@@ -1,18 +1,27 @@
 var MaxMapDataProvider = (function() {
+    var queryParams, providers, base_layers, map, data_obj, map_params, layerControl, overlayCount, numDatasets;
+
+    var initSharedVars = function() { //convenience function
+        queryParams = MaxMap.shared.queryParams;
+        providers = MaxMap.providers;
+        base_layers = MaxMap.shared.base_layers;
+        map = MaxMap.shared.map;
+        data_obj = MaxMap.shared.data_obj;
+        map_params = MaxMap.shared.map_params;
+        layerControl = MaxMap.shared.layerControl;
+        overlayCount = MaxMap.shared.overlayCount;
+        numDatasets = MaxMap.shared.numDatasets;
+    }
         /********************************
          * Data loading functions
          */
-    var load_map_data = function(data_format) {
-        $.getJSON('data/datasets.json').done(function(obj) {
-            map_params = {};
-            for (var k in obj) {
-                if (obj.hasOwnProperty(k) && k !== 'datasets') {
-                    map_params[k] = obj[k];
-                }
-            }
-            data_obj = obj.datasets;
-            setupMapControls(map_params);
-            numDatasets = datasetCount();
+
+    var getMapData = function(data_format) {
+        return $.getJSON('data/datasets.json').promise();
+    }
+
+    var processMapData = function(data_format) {
+            providers.display.setupMapControls(map_params);
             layerOrdering = [];
             for (k in data_obj) {
                 if (data_obj.hasOwnProperty(k)) {
@@ -34,9 +43,9 @@ var MaxMapDataProvider = (function() {
                 }
             }
             if (overlayCount === numDatasets) {
-                reorderLayers();
-                choropleths = getChoropleths();
-                if (!window.location.queryParams.report) {
+                providers.layers.reorderLayers();
+                choropleths = providers.choropleth.getChoropleths();
+                if (!queryParams.report) {
                     // Add check all and uncheck all buttons to overlays selection
                     var overlaysDiv = $("div.leaflet-control-layers-overlays");
                     var baseLayersDiv = $("div.leaflet-control-layers-base");
@@ -62,7 +71,7 @@ var MaxMapDataProvider = (function() {
                     $("form.leaflet-control-layers-list").prepend($(titleSpan));
                 }
             }
-            if (window.location.queryParams.report) {
+            if (queryParams.report) {
                 // Put location into title of report
                 var t = map_params.hasOwnProperty("titleElement") ?
                     $(map_params.titleElement) : $("#content h1");
@@ -77,12 +86,11 @@ var MaxMapDataProvider = (function() {
                     }
                 }
             }
-            if (!window.location.queryParams.report) {
+            if (!queryParams.report) {
                 // Add popup actions to layers control layer titles
-                addPopupActionsToLayersControlLayerTitles(data_obj, map_params);
+                providers.layers.addPopupActionsToLayersControlLayerTitles(data_obj, map_params);
             }
             map.invalidateSize(false);
-        }).fail(function(e) { map.spin(false); console.log(e); });
     }
 
     function loadLayerData(dataset, add) {
@@ -113,13 +121,13 @@ var MaxMapDataProvider = (function() {
         var layerGroup = L.featureGroup();
         dataset.data_format = data_format;
         dataset.data_loaded = false;
-        createColorBoxCSS(dataset);
+        providers.display.createColorBoxCSS(dataset);
         if (dataset.type === "regions" || dataset.type === "points") {
             dataset.layer_data = layerGroup;
-            if (!window.location.queryParams.report) {
+            if (!queryParams.report) {
                 layerControl.addOverlay(dataset.layer_data,
-                                        getStyledInitiativeLabel(dataset, "legend"),
-                                        getLayerCategoryLabel(dataset.category));
+                                        providers.display.getStyledInitiativeLabel(dataset, "legend"),
+                                        providers.display.getLayerCategoryLabel(dataset.category));
             }
         } else if (dataset.type === "choropleth") {
             if (dataset.category === "summary") {
@@ -128,12 +136,12 @@ var MaxMapDataProvider = (function() {
             if (dataset.category === "baseline") {
                 map.baselineChoropleths.push(dataset.slug);
             }
-            createChoroplethTools(dataset);
+            providers.choropleth.createChoroplethTools(dataset);
             dataset.layer_data = layerGroup;
-            if (!window.location.queryParams.report) {
+            if (!queryParams.report) {
                 layerControl.addOverlay(dataset.layer_data,
-                                        getStyledChoroplethLabel(dataset, "legend"),
-                                        getLayerCategoryLabel(dataset.category));
+                                        providers.choropleth.getStyledChoroplethLabel(dataset, "legend"),
+                                        providers.display.getLayerCategoryLabel(dataset.category));
             }
         }
     }
@@ -201,7 +209,7 @@ var MaxMapDataProvider = (function() {
                 dataset.layer_data.addLayer(newLayer);
                 dataset.data_loaded = true;
                 if (add) { dataset.layer_data.addTo(map); }
-                if (window.location.queryParams.report) {
+                if (queryParams.report) {
                     // Populate initiatives report
                     var container = $("div#initiatives");
                     var reportString = populateInitiativesReport();
@@ -231,7 +239,7 @@ var MaxMapDataProvider = (function() {
                 });
                 dataset.data_loaded = true;
                 if (add) { dataset.layer_data.addTo(map); }
-                if (window.location.queryParams.report) {
+                if (queryParams.report) {
                     // Populate initiatives report
                     var container = $("div#initiatives");
                     var reportString = populateInitiativesReport();
@@ -246,28 +254,20 @@ var MaxMapDataProvider = (function() {
      * Dataset information helpers
      */
     function isRequestedDataset(dataset) {
-        if (typeof window.location.queryParams.datasets == 'undefined') {
+        if (typeof queryParams.datasets == 'undefined') {
             if (dataset && dataset.hasOwnProperty("displayed")) {
                 return dataset.displayed;
             } else {
                 return true;
             }
         }
-        if (typeof window.location.queryParams.datasets == "string") {
-            return dataset.slug === window.location.queryParams.datasets;
+        if (typeof queryParams.datasets == "string") {
+            return dataset.slug === queryParams.datasets;
         }
-        return ($.inArray(dataset.slug, window.location.queryParams.datasets) !== -1);
+        return ($.inArray(dataset.slug, queryParams.datasets) !== -1);
     }
 
 
-
-    function datasetCount() {
-        var n = 0;
-        for (var k in data_obj) {
-            if (data_obj.hasOwnProperty(k)) n++;
-        }
-        return n;
-    }
 
     /********************************
      * Geocoding helper functions
@@ -298,8 +298,27 @@ var MaxMapDataProvider = (function() {
             return $.getJSON(serviceRequestUrl);
     }
 
+
+    var getAboutDataPath =function (map_params) {
+        if (queryParams && queryParams.hasOwnProperty("about_data_url")) {
+                return queryParams.about_data_url;
+            }
+            if (map_params.hasOwnProperty("about_data_url") && map_params.about_data_url) {
+                return map_params.about_data_url;
+            }
+            if (queryParams.hasOwnProperty("hostname") && queryParams.hasOwnProperty("rootpath") && queryParams.hasOwnProperty("subpath")) {
+                    var hn = window.location.queryParams.hostname;
+                    var rp = window.location.queryParams.rootpath;
+                    var sp = window.location.queryParams.subpath;
+                    return "//"+hn+rp+'datasets'+(sp.slice(-5) === '.html' ? '.html' : '');
+                }
+                return "datasets.html";
+    }
+
     return {
-        init: load_map_data,
+        getMapData: getMapData,
+        processMapData: processMapData,
+        initSharedVars: initSharedVars,
     }
 
 })();

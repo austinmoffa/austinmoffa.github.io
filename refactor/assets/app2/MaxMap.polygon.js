@@ -1,3 +1,19 @@
+"use strict";
+var MaxMapPolygonHelper = (function() {
+
+    var queryParams, providers, base_layers, map, data_obj, map_params;
+
+    var initSharedVars = function() { //convenience function
+        queryParams = MaxMap.shared.queryParams;
+        providers = MaxMap.providers;
+        base_layers = MaxMap.shared.base_layers;
+        map = MaxMap.shared.map;
+        data_obj = MaxMap.shared.data_obj;
+        map_params = MaxMap.shared.map_params;
+    }
+
+
+
 /********************************
  * Point in polygon functions
  */
@@ -163,4 +179,8 @@ function sortPolygonsByState(polygons) {
     return { countsByState: counts, sortedPolygons: result };
 }
 
+return {
+    initSharedVars: initSharedVars,
+}
 
+})();

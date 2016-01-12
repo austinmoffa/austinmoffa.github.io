@@ -1,5 +1,6 @@
 //global config/vars
 
+"use strict";
 var MaxMap = (function() {
     var providers = {};
     var shared= {
@@ -17,13 +18,13 @@ var MaxMap = (function() {
 
     var init = function () {
         this.providers =  {
-            //choropleth: MaxMapChloroplethProvider,
+            choropleth: MaxMapChoroplethHelper,
             data: MaxMapDataProvider,
             display: MaxMapDisplayHelper,
             driver: MaxMapDriver,
             layers: MaxMapLayerHelper,
             map: MaxMapLeaflet,
-            //polygon: MaxMapPolygon,
+            polygon: MaxMapPolygonHelper,
             query: MaxMapQueryParser
         };
         this.providers.driver.init();

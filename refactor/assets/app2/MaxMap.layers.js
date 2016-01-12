@@ -1,5 +1,6 @@
+"use strict";
 var MaxMapLayerHelper = (function() {
-    var queryParams, providers, base_layers, map, data_obj, map_params;
+    var queryParams, providers, base_layers, map, data_obj, map_params, numDatasets;
 
     var initSharedVars = function() { //convenience function
         queryParams = MaxMap.shared.queryParams;
@@ -8,6 +9,7 @@ var MaxMapLayerHelper = (function() {
         map = MaxMap.shared.map;
         data_obj = MaxMap.shared.data_obj;
         map_params = MaxMap.shared.map_params;
+        numDatasets = MaxMap.shared.numDatasets;
     }
 
 
@@ -108,7 +110,7 @@ function removeAllLayers() {
     }
 }
 
-function reorderLayers() {
+var reorderLayers = function() {
     for (var i = 0; i < numDatasets; i++) {
         var layer = data_obj[layerOrdering[i]].layer_data;
         if (map.hasLayer(layer)) {
@@ -132,6 +134,7 @@ function getSummaryOverlays() {
         setLayerControlHeight: setLayerControlHeight,
         addPopupActionsToLayersControlLayerTitles:addPopupActionsToLayersControlLayerTitles,
         initSharedVars: initSharedVars,
+        reorderLayers: reorderLayers,
     };
 
 })();

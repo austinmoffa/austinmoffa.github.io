@@ -1,3 +1,4 @@
+"use strict";
 var MaxMapQueryParser = (function() {
 
     var defaultParams = {
@@ -118,24 +119,6 @@ var MaxMapQueryParser = (function() {
                     return queryParams;
     }
 
-    function getAboutDataPath(map_params) {
-        if (window.location.hasOwnProperty("queryParams") &&
-            window.location.queryParams.hasOwnProperty("about_data_url")) {
-                return window.location.queryParams.about_data_url;
-            }
-            if (map_params.hasOwnProperty("about_data_url") && map_params.about_data_url) {
-                return map_params.about_data_url;
-            }
-            if (window.location.queryParams.hasOwnProperty("hostname") &&
-                window.location.queryParams.hasOwnProperty("rootpath") &&
-                window.location.queryParams.hasOwnProperty("subpath")) {
-                    var hn = window.location.queryParams.hostname;
-                    var rp = window.location.queryParams.rootpath;
-                    var sp = window.location.queryParams.subpath;
-                    return "//"+hn+rp+'datasets'+(sp.slice(-5) === '.html' ? '.html' : '');
-                }
-                return "datasets.html";
-    }
 
     function getPrintViewPath(map_params) {
         if (window.location.hasOwnProperty("queryParams") &&

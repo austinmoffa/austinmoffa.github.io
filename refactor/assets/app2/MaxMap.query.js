@@ -121,19 +121,18 @@ var MaxMapQueryParser = (function() {
 
 
     function getPrintViewPath(map_params) {
-        if (window.location.hasOwnProperty("queryParams") &&
-            window.location.queryParams.hasOwnProperty("print_url")) {
-                return window.location.queryParams.print_url;
+        if (queryParams && queryParams.hasOwnProperty("print_url")) {
+                return queryParams.print_url;
             }
             if (map_params.hasOwnProperty("print_url") && map_params.print_url) {
                 return map_params.print_url;
             }
-            if (window.location.queryParams.hasOwnProperty("hostname") &&
-                window.location.queryParams.hasOwnProperty("rootpath") &&
-                window.location.queryParams.hasOwnProperty("subpath")) {
-                    var hn = window.location.queryParams.hostname;
-                    var rp = window.location.queryParams.rootpath;
-                    var sp = window.location.queryParams.subpath;
+            if (queryParams.hasOwnProperty("hostname") &&
+                queryParams.hasOwnProperty("rootpath") &&
+                queryParams.hasOwnProperty("subpath")) {
+                    var hn = queryParams.hostname;
+                    var rp = queryParams.rootpath;
+                    var sp = queryParams.subpath;
                     return "//"+hn+rp+'print'+(sp.slice(-5) === '.html' ? '.html' : '');
                 }
                 return "print.html";

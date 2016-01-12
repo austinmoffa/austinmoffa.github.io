@@ -1,6 +1,5 @@
 var MaxMapDataProvider = (function() {
     var queryParams, providers, base_layers, map, data_obj, map_params, layerControl, overlayCount, numDatasets;
-
     var initSharedVars = function() { //convenience function
         queryParams = MaxMap.shared.queryParams;
         providers = MaxMap.providers;
@@ -16,13 +15,13 @@ var MaxMapDataProvider = (function() {
          * Data loading functions
          */
 
-    var getMapData = function(data_format) {
+    var getMapData = function() {
         return $.getJSON('data/datasets.json').promise();
     }
 
     var processMapData = function(data_format) {
             providers.display.setupMapControls(map_params);
-            layerOrdering = [];
+            MaxMap.shared.layerOrdering = [];
             for (k in data_obj) {
                 if (data_obj.hasOwnProperty(k)) {
                     data_obj[k].slug = k;
@@ -30,13 +29,13 @@ var MaxMapDataProvider = (function() {
             }
             for (k in data_obj) {
                 if (data_obj.hasOwnProperty(k) && data_obj[k].hasOwnProperty("layerOrder")) {
-                    layerOrdering[parseInt(data_obj[k]["layerOrder"],10)-1] = k;
+                    MaxMap.shared.layerOrdering[parseInt(data_obj[k]["layerOrder"],10)-1] = k;
                 }
             }
             var i;
             // Load each program and add it as an overlay layer to control
             for (i = 0; i < numDatasets; i++) {
-                k = layerOrdering[i];
+                k = MaxMap.shared.layerOrdering[i];
                 if (data_obj.hasOwnProperty(k)) {
                     populate_layer_control(data_obj[k], data_format);
                     overlayCount++;
@@ -50,8 +49,8 @@ var MaxMapDataProvider = (function() {
                     var overlaysDiv = $("div.leaflet-control-layers-overlays");
                     var baseLayersDiv = $("div.leaflet-control-layers-base");
                     var buttonsDiv = $("<div></div>").addClass("bulk-select-overlays");
-                    var selectAllButton = "<button class=\"select-all-overlays\" type=\"button\" onclick=\"addAllLayers()\">Select All</button>";
-                    var unselectAllButton = "<button class=\"unselect-all-overlays\" type=\"button\" onclick=\"removeAllLayers()\">Unselect All</button>";
+                    var selectAllButton = "<button class=\"select-all-overlays\" type=\"button\" onclick=\"MaxMap.providers.layers.addAllLayers()\">Select All</button>";
+                    var unselectAllButton = "<button class=\"unselect-all-overlays\" type=\"button\" onclick=\"MaxMap.providers.layers.removeAllLayers()\">Unselect All</button>";
                     buttonsDiv.html(selectAllButton+unselectAllButton);
                     // Add titles to Layers control
                     var baseLayersTitle = $("<div  class=\"leaflet-control-layers-section-name\"></div>")
@@ -79,7 +78,7 @@ var MaxMapDataProvider = (function() {
             }
             map.invalidateSize(false);
             for (i = 0; i < numDatasets; i++) {
-                k = layerOrdering[i];
+                k = MaxMap.shared.layerOrdering[i];
                 if (data_obj.hasOwnProperty(k)) {
                     if (isRequestedDataset(data_obj[k])) {
                         addLayerToMap(data_obj[k]);
@@ -93,7 +92,7 @@ var MaxMapDataProvider = (function() {
             map.invalidateSize(false);
     }
 
-    function loadLayerData(dataset, add) {
+    var loadLayerData = function(dataset, add) {
         add = (typeof add === "undefined") ? false : add;
         if (dataset.hasOwnProperty("data_loaded") && !dataset.data_loaded) {
             switch (dataset.data_format) {
@@ -109,7 +108,7 @@ var MaxMapDataProvider = (function() {
         }
     }
 
-    function addLayerToMap(dataset) {
+    var addLayerToMap = function(dataset) {
         if (dataset.data_loaded) {
             dataset.layer_data.addTo(map);
         } else {
@@ -185,7 +184,7 @@ var MaxMapDataProvider = (function() {
                 data_obj[overlay].choroplethLegend.update();
             });
         });
-        newLayer.on("click", displayPopup);
+        newLayer.on("click", providers.display.displayPopup);
         return newLayer;
     }
 
@@ -228,6 +227,7 @@ var MaxMapDataProvider = (function() {
             map.spin(true);
             $.getJSON(dataset.geojson, function(data) {
                 var newLayer;
+                console.log('1');
                 data.features.forEach(function(feature) {
                     newLayer = L.geoJson.css(feature);
                     newLayer.setStyle(data_obj[dataset]["style"]);
@@ -307,18 +307,21 @@ var MaxMapDataProvider = (function() {
                 return map_params.about_data_url;
             }
             if (queryParams.hasOwnProperty("hostname") && queryParams.hasOwnProperty("rootpath") && queryParams.hasOwnProperty("subpath")) {
-                    var hn = window.location.queryParams.hostname;
-                    var rp = window.location.queryParams.rootpath;
-                    var sp = window.location.queryParams.subpath;
+                    var hn = queryParams.hostname;
+                    var rp = queryParams.rootpath;
+                    var sp = queryParams.subpath;
                     return "//"+hn+rp+'datasets'+(sp.slice(-5) === '.html' ? '.html' : '');
                 }
                 return "datasets.html";
     }
 
     return {
+        getAboutDataPath: getAboutDataPath,
         getMapData: getMapData,
         processMapData: processMapData,
         initSharedVars: initSharedVars,
+        loadLayerData: loadLayerData,
+        addLayerToMap: addLayerToMap,
     }
 
 })();

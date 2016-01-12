@@ -69,7 +69,7 @@ function createDescriptionTooltip(dataset, p) {
     //console.log(tooltip);
     var tooltipContents = '<h3>' + dataset.label + '</h3><p>' + dataset.description
         + '</p><p class="layer-description-tooltip-more-link"><a href="'
-        + getAboutDataPath(p) + '#'+dataset.slug+'" target="_blank">Find out more or '
+        + providers.data.getAboutDataPath(p) + '#'+dataset.slug+'" target="_blank">Find out more or '
         + 'download this dataset</a></p>';
     //console.log(tooltipContents);
     tooltip.html(tooltipContents);
@@ -96,13 +96,13 @@ function tooltipIsNearTheBottomEdge(el) {
 /********************************
  * Layer management functions
  */
-function addAllLayers() {
+var addAllLayers = function() {
     for (var i = 0; i < numDatasets; i++) {
-        addLayerToMap(data_obj[layerOrdering[i]]);
+        providers.data.addLayerToMap(data_obj[MaxMap.shared.layerOrdering[i]]);
     }
 }
 
-function removeAllLayers() {
+var removeAllLayers = function() {
     for (var k in data_obj) {
         if (data_obj.hasOwnProperty(k)) {
             map.removeLayer(data_obj[k].layer_data);
@@ -112,7 +112,7 @@ function removeAllLayers() {
 
 var reorderLayers = function() {
     for (var i = 0; i < numDatasets; i++) {
-        var layer = data_obj[layerOrdering[i]].layer_data;
+        var layer = data_obj[MaxMap.shared.layerOrdering[i]].layer_data;
         if (map.hasLayer(layer)) {
             layer.bringToFront();
         }
@@ -135,6 +135,8 @@ function getSummaryOverlays() {
         addPopupActionsToLayersControlLayerTitles:addPopupActionsToLayersControlLayerTitles,
         initSharedVars: initSharedVars,
         reorderLayers: reorderLayers,
+        addAllLayers: addAllLayers,
+        removeAllLayers: removeAllLayers,
     };
 
 })();

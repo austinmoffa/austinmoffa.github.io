@@ -288,7 +288,7 @@ var MaxMapDisplayHelper = (function() {
         var popupString = "";
         var numPolys = countLocationInitiatives(locations);
         for (var i = 0; i < numDatasets; i++) {
-            var dataset = layerOrdering[i];
+            var dataset = MaxMap.shared.layerOrdering[i];
             if (locations.hasOwnProperty(dataset) && locations[dataset].length) {
                 switch (data_obj[dataset].category) {
                     case "initiative":

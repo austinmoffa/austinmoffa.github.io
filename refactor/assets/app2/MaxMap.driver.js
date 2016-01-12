@@ -1,4 +1,8 @@
 "use strict";
+//TODOS
+//
+//Look for getJson/ajax calls. They aren't breaking loudly so you won't notice.
+//
 var MaxMapDriver = (function() {
 
 
@@ -33,7 +37,7 @@ var MaxMapDriver = (function() {
 
     }
     var init = function() {
-        MaxMap.providers.data.getMapData('topojson').done(function(obj) {
+        MaxMap.providers.data.getMapData().done(function(obj) {
             setData(obj);
             MaxMap.providers.query.init(); //setting our queryParams
             MaxMap.shared.map = MaxMap.providers.map.createMap(); //create map
@@ -41,9 +45,9 @@ var MaxMapDriver = (function() {
 
             initChildrenSharedVars(); //once map is initialized, we can init for all children - all references defined by now
 
-            MaxMap.providers.map.configMap(); //create map
+            MaxMap.providers.map.configMap();
 
-            MaxMap.providers.data.processMapData();
+            MaxMap.providers.data.processMapData('topojson');
         });
     }
     return {

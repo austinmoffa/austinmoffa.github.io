@@ -1,6 +1,6 @@
 "use strict";
 var MaxMapLeaflet = (function() {
-    var queryParams, providers, base_layers, map, data_obj, map_params;
+    var queryParams, providers, base_layers, map, data_obj, map_params, numDatasets;
 
     var initSharedVars = function() { //convenience function
         queryParams = MaxMap.shared.queryParams;
@@ -9,6 +9,7 @@ var MaxMapLeaflet = (function() {
         map = MaxMap.shared.map;
         data_obj = MaxMap.shared.data_obj;
         map_params = MaxMap.shared.map_params;
+        numDatasets = MaxMap.shared.numDatasets;
     }
 
     var createMap = function() {
@@ -32,8 +33,10 @@ var MaxMapLeaflet = (function() {
             overlay_groups[providers.display.getLayerCategoryLabel("summary")] = {};
             overlay_groups[providers.display.getLayerCategoryLabel("initiative")] = {};
             overlay_groups[providers.display.getLayerCategoryLabel("baseline")] = {};
-            return L.control.groupedLayers(
+            var layerControl = L.control.groupedLayers(
                 base_layers, overlay_groups, { exclusiveGroups: [] });
+
+
                 layerControl.addTo(map);
                 // For accessibility
                 $("a.leaflet-control-layers-toggle")
@@ -42,6 +45,7 @@ var MaxMapLeaflet = (function() {
                 $(".leaflet-control-layers-toggle").on("mouseover", providers.layers.setLayerControlHeight)
                 .on("focus", providers.layers.setLayerControlHeight)
                 .on("touchstart", providers.layers.setLayerControlHeight);
+                return layerControl;
         }
 
 
@@ -63,16 +67,16 @@ var MaxMapLeaflet = (function() {
         // Add map event handlers
         map.on("overlayadd", function(e) {
             for (var i = 0; i < numDatasets; i++) {
-                var dataset = layerOrdering[i];
+                var dataset = MaxMap.shared.layerOrdering[i];
                 if (data_obj.hasOwnProperty(dataset) && e.layer === data_obj[dataset].layer_data) {
-                    if (!data_obj[dataset].data_loaded) { loadLayerData(data_obj[dataset]); }
+                    if (!data_obj[dataset].data_loaded) { providers.data.loadLayerData(data_obj[dataset]); }
                     if (!queryParams.report && data_obj[dataset].type === "choropleth") {
                         data_obj[dataset].choroplethLegend.update(e);
                         data_obj[dataset].choroplethLegend.addTo(map);
                     }
                 }
             }
-            reorderLayers();
+            providers.layers.reorderLayers();
         });
 
         map.on("overlayremove", function(e) {
@@ -137,7 +141,7 @@ var MaxMapLeaflet = (function() {
                 $("a.leaflet-control-layers-toggle").on("mouseover", function(e) {
                     if (!queryParams.report) {
                         // Add popup actions to layers control layer titles
-                        providers.layers.addPopupActionsToLayersControlLayerTitles(window.data_obj, window.map_params);
+                        providers.layers.addPopupActionsToLayersControlLayerTitles(data_obj, map_params);
                     }
                 });
 

@@ -157,12 +157,12 @@ var MaxMapDataProvider = (function() {
         }
         newLayer.on("mouseover", function(e) {
             var targets = {};
-            getSummaryOverlays().map( function(summary) {
-                var poly = getLocationsForPointInDataset(e.latlng, data_obj[summary]);
+            MaxMap.providers.layers.getSummaryOverlays().map( function(summary) {
+                var poly = MaxMap.providers.polygon.getLocationsForPointInDataset(e.latlng, data_obj[summary]);
                 if (poly.length) { targets[summary] = poly[0]; }
             });
-            getBaselineChoropleths().map( function(choro) {
-                var poly = getLocationsForPointInDataset(e.latlng, data_obj[choro]);
+            MaxMap.providers.choropleth.getBaselineChoropleths().map( function(choro) {
+                var poly = MaxMap.providers.polygon.getLocationsForPointInDataset(e.latlng, data_obj[choro]);
                 if (poly.length) { targets[choro] = poly[0]; }
             });
             for (var overlay in targets) {
@@ -177,10 +177,10 @@ var MaxMapDataProvider = (function() {
             }
         });
         newLayer.on("mouseout", function(e) {
-            getSummaryOverlays().forEach(function(overlay) {
+            MaxMap.providers.layers.getSummaryOverlays().forEach(function(overlay) {
                 data_obj[overlay].choroplethLegend.update();
             });
-            getBaselineChoropleths().forEach(function(overlay) {
+            MaxMap.providers.choropleth.getBaselineChoropleths().forEach(function(overlay) {
                 data_obj[overlay].choroplethLegend.update();
             });
         });
@@ -292,7 +292,7 @@ var MaxMapDataProvider = (function() {
             return {city: city, county: county, state: state};
     }
 
-    function getReverseGeolocationPromise(latlng) {
+    var getReverseGeolocationPromise = function(latlng) {
         var serviceRequestUrl = map_params.reverse_geocode_service_url+"&lat="+latlng.lat+
             "&lon="+latlng.lng+"&zoom=12&addressdetails=1";
             return $.getJSON(serviceRequestUrl);
@@ -322,6 +322,7 @@ var MaxMapDataProvider = (function() {
         initSharedVars: initSharedVars,
         loadLayerData: loadLayerData,
         addLayerToMap: addLayerToMap,
+        getReverseGeolocationPromise: getReverseGeolocationPromise,
     }
 
 })();

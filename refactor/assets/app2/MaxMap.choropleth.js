@@ -67,7 +67,7 @@ var MaxMapChoroplethHelper = (function() {
             });
             return gradientBox.prop("outerHTML");
     }
-    function getBaselineChoropleths() {
+    var getBaselineChoropleths = function() {
         return map.baselineChoropleths;
     }
 
@@ -194,7 +194,7 @@ var createChoroplethTools = function(dataset) {
         if (this.dataset.hasOwnProperty("legend_credits") && this.dataset.legend_credits) {
             var creditString = this.dataset.legend_credits;
             legendString += '<div class="choropleth-legend-data-credits">'+creditString
-                +' (<a href="'+getAboutDataPath(window.map_params)+'#'+this.dataset.slug
+                +' (<a href="'+ MaxMap.providers.data.getAboutDataPath(map_params)+'#'+this.dataset.slug
                         +'" target="_blank">more</a>)</div>';
         }
         $(this._div).html(legendString);
@@ -211,7 +211,7 @@ function styleChoroplethRegion(dataset, region) {
 function addChoroplethRegionEventHandlers(region) {
     region.on("mouseover", function(e) {
             var targets = {};
-            getSummaryOverlays().map( function(summary) {
+            MaxMap.providers.layers.getSummaryOverlays().map( function(summary) {
                 var poly = getLocationsForPointInDataset(e.latlng, data_obj[summary]);
                 if (poly.length) { targets[summary] = poly[0]; }
                 });
@@ -231,7 +231,7 @@ function addChoroplethRegionEventHandlers(region) {
             }
             });
     region.on("mouseout", function(e) {
-            getSummaryOverlays().forEach(function(overlay) {
+            MaxMap.providers.layers.getSummaryOverlays().forEach(function(overlay) {
                 data_obj[overlay].choroplethLegend.update();
                 });
             getBaselineChoropleths().forEach(function(overlay) {
@@ -246,5 +246,6 @@ return {
     createChoroplethTools: createChoroplethTools,
     getStyledChoroplethLabel: getStyledChoroplethLabel,
     getChoropleths: getChoropleths,
+    getBaselineChoropleths: getBaselineChoropleths,
 };
                 })();

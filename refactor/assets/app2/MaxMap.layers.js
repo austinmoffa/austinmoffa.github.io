@@ -126,7 +126,7 @@ var setLayerControlHeight = function (e) {
     $("style#layercontrol").text(cssString);
 }
 
-function getSummaryOverlays() {
+var getSummaryOverlays = function() {
     return map.summaryOverlays;
 }
 
@@ -137,6 +137,7 @@ function getSummaryOverlays() {
         reorderLayers: reorderLayers,
         addAllLayers: addAllLayers,
         removeAllLayers: removeAllLayers,
+        getSummaryOverlays: getSummaryOverlays,
     };
 
 })();

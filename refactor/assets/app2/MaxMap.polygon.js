@@ -17,7 +17,7 @@ var MaxMapPolygonHelper = (function() {
 /********************************
  * Point in polygon functions
  */
-function getLocationsForPoint(p) {
+var getLocationsForPoint = function(p) {
     var locations = {};
     for (var dataset in data_obj) {
         if (data_obj.hasOwnProperty(dataset)) {
@@ -27,7 +27,7 @@ function getLocationsForPoint(p) {
     return locations;
 }
 
-function getLocationsForPointInDataset(p, dataset) {
+var getLocationsForPointInDataset = function(p, dataset) {
     var locations = [];
     if (dataset) {
         locations = [];
@@ -110,7 +110,7 @@ function getLocationsInBoundsForDataset(dataset) {
 /********************************
  * Polygon counting/sorting functions
  */
-function countLocationInitiatives(polys, by) {
+var countLocationInitiatives = function(polys, by) {
     return Object.keys(polys).map(function (dataset) {
         if (polys.hasOwnProperty(dataset) && data_obj[dataset].category === "initiative") {
             /* if (by === "state") {
@@ -181,6 +181,9 @@ function sortPolygonsByState(polygons) {
 
 return {
     initSharedVars: initSharedVars,
+    getLocationsForPointInDataset: getLocationsForPointInDataset,
+    getLocationsForPoint: getLocationsForPoint,
+    countLocationInitiatives: countLocationInitiatives
 }
 
 })();

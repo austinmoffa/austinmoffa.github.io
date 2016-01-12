@@ -1,5 +1,5 @@
 var MaxMapDisplayHelper = (function() {
-    var queryParams, providers, base_layers, map, data_obj, map_params;
+    var queryParams, providers, base_layers, map, data_obj, map_params, numDatasets;
 
     var initSharedVars = function() { //convenience function
         queryParams = MaxMap.shared.queryParams;
@@ -8,6 +8,7 @@ var MaxMapDisplayHelper = (function() {
         map = MaxMap.shared.map;
         data_obj = MaxMap.shared.data_obj;
         map_params = MaxMap.shared.map_params;
+        numDatasets = MaxMap.shared.numDatasets;
     }
 
     function hexToRgb(hex) {
@@ -240,7 +241,7 @@ var MaxMapDisplayHelper = (function() {
     function addLocationToReportTitle(titleElement) {
         var t;
         if(titleElement instanceof $) { t = titleElement; } else { t = $(titleElement); }
-        getReverseGeolocationPromise(map.getCenter()).done(function (data) {
+        MaxMap.providers.data.getReverseGeolocationPromise(map.getCenter()).done(function (data) {
             var titleString = t.html() + " for " + getPopupLocationString(data) + " and Surrounds";
             t.html(titleString);
         }).error(function (err) {
@@ -286,7 +287,7 @@ var MaxMapDisplayHelper = (function() {
      */
     function getPopupSegmentsForLocations(locations) {
         var popupString = "";
-        var numPolys = countLocationInitiatives(locations);
+        var numPolys = providers.polygon.countLocationInitiatives(locations);
         for (var i = 0; i < numDatasets; i++) {
             var dataset = MaxMap.shared.layerOrdering[i];
             if (locations.hasOwnProperty(dataset) && locations[dataset].length) {
@@ -334,14 +335,14 @@ var MaxMapDisplayHelper = (function() {
 
     var displayPopup = function(e) {
         if (!queryParams.report) {
-            getReverseGeolocationPromise(e.latlng).done(function (data) {
+            MaxMap.providers.data.getReverseGeolocationPromise(e.latlng).done(function (data) {
                 $("#popup_location_heading").text(getPopupLocationString(data));
             }).error(function (err) {
                 console.log("Reverse geolocation failed. Error:");
                 console.log(err);
             });
             var popup = L.popup().setLatLng(e.latlng);
-            var locations = getLocationsForPoint(e.latlng);
+            var locations = providers.polygon.getLocationsForPoint(e.latlng);
             var popupString = getPopupSegmentsForLocations(locations);
             if (!popupString) {
                 popupString = "No layers found.";

@@ -11,85 +11,90 @@ var MaxMapDataProvider = (function() {
         overlayCount = MaxMap.shared.overlayCount;
         numDatasets = MaxMap.shared.numDatasets;
     }
-        /********************************
-         * Data loading functions
-         */
+    /********************************
+     * Data loading functions
+     */
 
     var getMapData = function() {
         return $.getJSON('data/datasets.json').promise();
     }
 
+    var appendOverlaysControlDiv = function() {
+        providers.layers.reorderLayers();
+        choropleths = providers.choropleth.getChoropleths();
+        if (!queryParams.report) {
+            // Add check all and uncheck all buttons to overlays selection
+            var overlaysDiv = $("div.leaflet-control-layers-overlays");
+            var baseLayersDiv = $("div.leaflet-control-layers-base");
+            var buttonsDiv = $("<div></div>").addClass("bulk-select-overlays");
+            var selectAllButton = "<button class=\"select-all-overlays\" type=\"button\" onclick=\"MaxMap.providers.layers.addAllLayers()\">Select All</button>";
+            var unselectAllButton = "<button class=\"unselect-all-overlays\" type=\"button\" onclick=\"MaxMap.providers.layers.removeAllLayers()\">Unselect All</button>";
+            buttonsDiv.html(selectAllButton+unselectAllButton);
+            // Add titles to Layers control
+            var baseLayersTitle = $("<div  class=\"leaflet-control-layers-section-name\"></div>")
+            .html("<h4>Base Map Layers</h4>");
+            baseLayersDiv.before(baseLayersTitle);
+            var overlayLayersTitle = $("<div class=\"leaflet-control-layers-section-name\"></div>")
+            .html("<h4>Overlay Layers</h4>")
+            .append(buttonsDiv);
+            overlaysDiv.before(overlayLayersTitle);
+            var titleSpan = "<div><h3 class=\"leaflet-control-layers-title\">"
+            + "<span>What's on this map?</span></h3>"
+            + "<p class=\"leaflet-control-layers-subtitle-info\">"
+            + "<span class=\"fa fa-download\"></span><a href=\""
+            + getAboutDataPath(map_params)
+            + "\" target=\"_blank\">More about these initiatives and data sets</a>"
+            + "</p></div>";
+            $("form.leaflet-control-layers-list").prepend($(titleSpan));
+        }
+    }
+
     var processMapData = function(data_format) {
-            providers.display.setupMapControls(map_params);
-            MaxMap.shared.layerOrdering = [];
-            for (k in data_obj) {
-                if (data_obj.hasOwnProperty(k)) {
-                    data_obj[k].slug = k;
+        providers.display.setupMapControls(map_params);
+        MaxMap.shared.layerOrdering = [];
+        for (k in data_obj) {
+            if (data_obj.hasOwnProperty(k)) {
+                data_obj[k].slug = k;
+            }
+        }
+        for (k in data_obj) {
+            if (data_obj.hasOwnProperty(k) && data_obj[k].hasOwnProperty("layerOrder")) {
+                MaxMap.shared.layerOrdering[parseInt(data_obj[k]["layerOrder"],10)-1] = k;
+            }
+        }
+        var i;
+        // Load each program and add it as an overlay layer to control
+        for (i = 0; i < numDatasets; i++) {
+            k = MaxMap.shared.layerOrdering[i];
+            if (data_obj.hasOwnProperty(k)) {
+                populate_layer_control(data_obj[k], data_format);
+                overlayCount++;
+            }
+        }
+
+        if (overlayCount === numDatasets) {
+            appendOverlaysControlDiv();
+        }
+        if (queryParams.report) {
+            // Put location into title of report
+            var t = map_params.hasOwnProperty("titleElement") ?
+                $(map_params.titleElement) : $("#content h1");
+                addLocationToReportTitle(t);
+        }
+        map.invalidateSize(false);
+        for (i = 0; i < numDatasets; i++) {
+            k = MaxMap.shared.layerOrdering[i];
+            if (data_obj.hasOwnProperty(k)) {
+                if (isRequestedDataset(data_obj[k])) {
+                    addLayerToMap(data_obj[k]);
                 }
             }
-            for (k in data_obj) {
-                if (data_obj.hasOwnProperty(k) && data_obj[k].hasOwnProperty("layerOrder")) {
-                    MaxMap.shared.layerOrdering[parseInt(data_obj[k]["layerOrder"],10)-1] = k;
-                }
-            }
-            var i;
-            // Load each program and add it as an overlay layer to control
-            for (i = 0; i < numDatasets; i++) {
-                k = MaxMap.shared.layerOrdering[i];
-                if (data_obj.hasOwnProperty(k)) {
-                    populate_layer_control(data_obj[k], data_format);
-                    overlayCount++;
-                }
-            }
-            if (overlayCount === numDatasets) {
-                providers.layers.reorderLayers();
-                choropleths = providers.choropleth.getChoropleths();
-                if (!queryParams.report) {
-                    // Add check all and uncheck all buttons to overlays selection
-                    var overlaysDiv = $("div.leaflet-control-layers-overlays");
-                    var baseLayersDiv = $("div.leaflet-control-layers-base");
-                    var buttonsDiv = $("<div></div>").addClass("bulk-select-overlays");
-                    var selectAllButton = "<button class=\"select-all-overlays\" type=\"button\" onclick=\"MaxMap.providers.layers.addAllLayers()\">Select All</button>";
-                    var unselectAllButton = "<button class=\"unselect-all-overlays\" type=\"button\" onclick=\"MaxMap.providers.layers.removeAllLayers()\">Unselect All</button>";
-                    buttonsDiv.html(selectAllButton+unselectAllButton);
-                    // Add titles to Layers control
-                    var baseLayersTitle = $("<div  class=\"leaflet-control-layers-section-name\"></div>")
-                    .html("<h4>Base Map Layers</h4>");
-                    baseLayersDiv.before(baseLayersTitle);
-                    var overlayLayersTitle = $("<div class=\"leaflet-control-layers-section-name\"></div>")
-                    .html("<h4>Overlay Layers</h4>")
-                    .append(buttonsDiv);
-                    overlaysDiv.before(overlayLayersTitle);
-                    var titleSpan = "<div><h3 class=\"leaflet-control-layers-title\">"
-                    + "<span>What's on this map?</span></h3>"
-                    + "<p class=\"leaflet-control-layers-subtitle-info\">"
-                    + "<span class=\"fa fa-download\"></span><a href=\""
-                    + getAboutDataPath(map_params)
-                    + "\" target=\"_blank\">More about these initiatives and data sets</a>"
-                    + "</p></div>";
-                    $("form.leaflet-control-layers-list").prepend($(titleSpan));
-                }
-            }
-            if (queryParams.report) {
-                // Put location into title of report
-                var t = map_params.hasOwnProperty("titleElement") ?
-                    $(map_params.titleElement) : $("#content h1");
-                    addLocationToReportTitle(t);
-            }
-            map.invalidateSize(false);
-            for (i = 0; i < numDatasets; i++) {
-                k = MaxMap.shared.layerOrdering[i];
-                if (data_obj.hasOwnProperty(k)) {
-                    if (isRequestedDataset(data_obj[k])) {
-                        addLayerToMap(data_obj[k]);
-                    }
-                }
-            }
-            if (!queryParams.report) {
-                // Add popup actions to layers control layer titles
-                providers.layers.addPopupActionsToLayersControlLayerTitles(data_obj, map_params);
-            }
-            map.invalidateSize(false);
+        }
+        if (!queryParams.report) {
+            // Add popup actions to layers control layer titles
+            providers.layers.addPopupActionsToLayersControlLayerTitles(data_obj, map_params);
+        }
+        map.invalidateSize(false);
     }
 
     var loadLayerData = function(dataset, add) {
@@ -117,7 +122,7 @@ var MaxMapDataProvider = (function() {
     }
 
     function populate_layer_control(dataset, data_format) {
-        var layerGroup = L.featureGroup();
+        var layerGroup = MaxMap.providers.map.getLayerGroup();
         dataset.data_format = data_format;
         dataset.data_loaded = false;
         providers.display.createColorBoxCSS(dataset);
@@ -135,7 +140,7 @@ var MaxMapDataProvider = (function() {
             if (dataset.category === "baseline") {
                 map.baselineChoropleths.push(dataset.slug);
             }
-            providers.choropleth.createChoroplethTools(dataset);
+            providers.map.createChoroplethTools(dataset);
             dataset.layer_data = layerGroup;
             if (!queryParams.report) {
                 layerControl.addOverlay(dataset.layer_data,
@@ -146,15 +151,7 @@ var MaxMapDataProvider = (function() {
     }
 
     function create_topojson_layer(dataset) {
-        var newLayer = new L.TopoJSON();
-        if (dataset.type === "regions" || dataset.type === "points") {
-            newLayer.setStyle(dataset.style);
-            newLayer.options.pointToLayer = function(feature, latlng) {
-                var icon_name = dataset.icon ? dataset.icon : 'default';
-                smallIcon = CustomMarkers.getMarker(icon_name, dataset.style.color);
-                return L.marker(latlng,{icon: smallIcon});
-            };
-        }
+        var newLayer = MaxMap.providers.map.getNewTopoJSONLayer(dataset);
         newLayer.on("mouseover", function(e) {
             var targets = {};
             MaxMap.providers.layers.getSummaryOverlays().map( function(summary) {
@@ -227,9 +224,8 @@ var MaxMapDataProvider = (function() {
             map.spin(true);
             $.getJSON(dataset.geojson, function(data) {
                 var newLayer;
-                console.log('1');
                 data.features.forEach(function(feature) {
-                    newLayer = L.geoJson.css(feature);
+                    newLayer = MaxMap.providers.map.newGeoJSONLayer(feature);
                     newLayer.setStyle(data_obj[dataset]["style"]);
                     if (dataset.type === "choropleth") {
                         MaxMap.providers.choropleth.styleChoroplethRegion(dataset, theLayer);
@@ -301,18 +297,18 @@ var MaxMapDataProvider = (function() {
 
     var getAboutDataPath =function (map_params) {
         if (queryParams && queryParams.hasOwnProperty("about_data_url")) {
-                return queryParams.about_data_url;
-            }
-            if (map_params.hasOwnProperty("about_data_url") && map_params.about_data_url) {
-                return map_params.about_data_url;
-            }
-            if (queryParams.hasOwnProperty("hostname") && queryParams.hasOwnProperty("rootpath") && queryParams.hasOwnProperty("subpath")) {
-                    var hn = queryParams.hostname;
-                    var rp = queryParams.rootpath;
-                    var sp = queryParams.subpath;
-                    return "//"+hn+rp+'datasets'+(sp.slice(-5) === '.html' ? '.html' : '');
-                }
-                return "datasets.html";
+            return queryParams.about_data_url;
+        }
+        if (map_params.hasOwnProperty("about_data_url") && map_params.about_data_url) {
+            return map_params.about_data_url;
+        }
+        if (queryParams.hasOwnProperty("hostname") && queryParams.hasOwnProperty("rootpath") && queryParams.hasOwnProperty("subpath")) {
+            var hn = queryParams.hostname;
+            var rp = queryParams.rootpath;
+            var sp = queryParams.subpath;
+            return "//"+hn+rp+'datasets'+(sp.slice(-5) === '.html' ? '.html' : '');
+        }
+        return "datasets.html";
     }
 
     return {

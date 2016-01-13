@@ -476,4 +476,4 @@ var MaxMapDisplayHelper = (function() {
         setupMapControls: setupMapControls,
         getColor: getColor,
     };
-                          })();
+})();

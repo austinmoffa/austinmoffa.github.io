@@ -1,8 +1,5 @@
+//clean
 "use strict";
-//TODOS
-//
-//Look for getJson/ajax calls. They aren't breaking loudly so you won't notice.
-//
 var MaxMapDriver = (function() {
 
 

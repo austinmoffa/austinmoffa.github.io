@@ -1,13 +1,8 @@
-//global config/vars
 "use strict";
 var MaxMap = (function() {
     var providers = {};
     var shared= {
-        //map, etc
-        //var data_obj, map_params, numDatasets, layerOrdering, choropleths;
-        //var queryParams;
-        //var overlayCount = 0;
-        //base_layers
+        //map, data_obj, map_params, numDatasets, layerOrdering, choropleths, queryParams, base_layers
         overlayCount: 0,
     };
 
@@ -24,7 +19,8 @@ var MaxMap = (function() {
             layers: MaxMapLayerHelper,
             map: MaxMapLeaflet,
             polygon: MaxMapPolygonHelper,
-            query: MaxMapQueryParser
+            query: MaxMapQueryParser,
+            marker: MaxMapMarkers
         };
         this.providers.driver.init();
     }

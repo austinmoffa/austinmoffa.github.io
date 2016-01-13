@@ -15,18 +15,6 @@ var MaxMapQueryParser = (function() {
         "hasZoom": false
     };
 
-    var setBaseLayers = function() {
-        var tftransport = L.tileLayer.provider("Thunderforest.Transport");
-        var tflandscape = L.tileLayer.provider("Thunderforest.Landscape");
-        var osm = L.tileLayer.provider("OpenStreetMap");
-        var stamenwc = L.tileLayer.provider("Stamen.Watercolor");
-        MaxMap.shared.base_layers = {
-            "Thunderforest Transport": tftransport,
-            "Thunderforest Landscape": tflandscape,
-            "Open Street Map": osm,
-            "Stamen Watercolor": stamenwc
-        };
-    }
 
     var init = function() {
         var pn = window.location.pathname;
@@ -47,7 +35,7 @@ var MaxMapQueryParser = (function() {
             MaxMap.shared.queryParams = queryParams;
             // Load base map providers as needed
 
-            setBaseLayers();
+            MaxMap.providers.map.setBaseLayers();
     }
 
     function parseQueryParams(defaultGuessIsReport) {

@@ -313,7 +313,7 @@ var MaxMapDisplayHelper = (function() {
         var location_string = "";
         var address, city, county, state;
         if (data.hasOwnProperty("address")) {
-            address = fixBadAddressData(data.address);
+            address = MaxMap.providers.data.fixBadAddressData(data.address);
             city = address.city;
             county = address.county;
             state = address.state;

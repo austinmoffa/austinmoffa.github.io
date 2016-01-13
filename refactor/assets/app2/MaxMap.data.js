@@ -272,7 +272,7 @@ var MaxMapDataProvider = (function() {
     /********************************
      * Geocoding helper functions
      */
-    function fixBadAddressData(address) {
+    var fixBadAddressData = function(address) {
         var city = "", county = "", state = "";
         if (address.hasOwnProperty("city")) { city = address.city.trim(); }
         if (address.hasOwnProperty("county")) { county = address.county.trim(); }
@@ -323,6 +323,7 @@ var MaxMapDataProvider = (function() {
         loadLayerData: loadLayerData,
         addLayerToMap: addLayerToMap,
         getReverseGeolocationPromise: getReverseGeolocationPromise,
+        fixBadAddressData: fixBadAddressData,
     }
 
 })();

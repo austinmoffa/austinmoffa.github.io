@@ -146,7 +146,7 @@ function getState(polygon) {
     return state;
 }
 
-function sortPolygonsByState(polygons) {
+var sortPolygonsByState = function(polygons) {
     var partitions = {};
     var state;
     for (var poly in polygons) {
@@ -183,7 +183,8 @@ return {
     initSharedVars: initSharedVars,
     getLocationsForPointInDataset: getLocationsForPointInDataset,
     getLocationsForPoint: getLocationsForPoint,
-    countLocationInitiatives: countLocationInitiatives
+    countLocationInitiatives: countLocationInitiatives,
+    sortPolygonsByState: sortPolygonsByState
 }
 
 })();

@@ -26,7 +26,7 @@ var MaxMapDisplayHelper = (function() {
         } : null;
     }
 
-    function getColor(dataset, d) {
+    var getColor = function(dataset, d) {
         if (dataset.hasOwnProperty("colors") && dataset.hasOwnProperty("thresholds")) {
             var col = dataset.colors;
             var thr = dataset.thresholds;
@@ -143,20 +143,20 @@ var MaxMapDisplayHelper = (function() {
      * Summary display functions
      */
     function getSummarySegment(dataset, polygons, numPolygons, where) {
-        var polysAndCounts = sortPolygonsByState(polygons);
+        var polysAndCounts = MaxMap.providers.polygon.sortPolygonsByState(polygons);
         var polys = polysAndCounts.sortedPolygons;
         //console.log(polysAndCounts.countsByState);
         var popupString = "<div class=\""+where+"-segment\">" +
             (where == "report" ? "<h2>" : "") +
-                getStyledChoroplethLabel(dataset, where) +
+                MaxMap.providers.choropleth.getStyledChoroplethLabel(dataset, where) +
                     (where == "report" ? '</h2><div class="initiative-locations">' : "");
                     for (var poly in polys) {
                         if (polys.hasOwnProperty(poly)) {
                             popupString += "<p><strong>" + (where !== "report" ? numPolygons :
                                                             polysAndCounts.countsByState[getState(polys[poly])]) + "</strong> of " +
-                                                                Math.round(getChoroplethVariable(dataset, polygons[poly].feature.properties))
+                                                                Math.round(MaxMap.providers.choropleth.getChoroplethVariable(dataset, polygons[poly].feature.properties))
                                                                 + " programs in " +
-                                                                    getChoroplethVariableLabel(dataset, polygons[poly].feature.properties) + "</p>";
+                                                                    MaxMap.providers.choropleth.getChoroplethVariableLabel(dataset, polygons[poly].feature.properties) + "</p>";
                         }
                     }
                     popupString += (where == "report" ? '</div>' : "");
@@ -178,7 +178,7 @@ var MaxMapDisplayHelper = (function() {
     function getBaselineSegment(dataset, polygons, where) {
         var popupString = "<div class=\""+where+"-segment\">";
         var poly;
-        var polysAndCounts = sortPolygonsByState(polygons);
+        var polysAndCounts = MaxMap.providers.polygon.sortPolygonsByState(polygons);
         var polys = polysAndCounts.sortedPolygons;
         if (dataset.type == "regions" || dataset.type === "points") {
             popupString += (where == "report" ? "<h2>" : "") +
@@ -210,14 +210,14 @@ var MaxMapDisplayHelper = (function() {
                     popupString += (where == "report" ? '</div>' : "");
         } else if (dataset.type = "choropleth") {
             popupString += (where == "report" ? "<h2>" : "") +
-                getStyledChoroplethLabel(dataset, where) +
+                MaxMap.providers.choropleth.getStyledChoroplethLabel(dataset, where) +
                     (where == "report" ? '</h2><div class="initiative-locations">' : "");
                     for (poly in polys) {
                         if (polys.hasOwnProperty(poly)) {
                             popupString += "<p><strong>" +
-                                Math.round(getChoroplethVariable(dataset, polys[poly].feature.properties)) +
+                                Math.round(MaxMap.providers.choropleth.getChoroplethVariable(dataset, polys[poly].feature.properties)) +
                                     "%</strong> "
-                                    + getChoroplethVariableLabel(dataset, polys[poly].feature.properties) +
+                                    + MaxMap.providers.choropleth.getChoroplethVariableLabel(dataset, polys[poly].feature.properties) +
                                         "</p>";
                         }
                     }
@@ -474,5 +474,6 @@ var MaxMapDisplayHelper = (function() {
         createColorBoxCSS: createColorBoxCSS,
         getStyledInitiativeLabel: getStyledInitiativeLabel,
         setupMapControls: setupMapControls,
+        getColor: getColor,
     };
                           })();

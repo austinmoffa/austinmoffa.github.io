@@ -79,7 +79,7 @@ var MaxMapChoroplethHelper = (function() {
                 }
         });
     }
-    function getChoroplethVariableLabel (dataset, props) {
+    var getChoroplethVariableLabel = function(dataset, props) {
         var varlabels = dataset.variable_label;
         if (varlabels instanceof Array) {
             return varlabels.map(function (k) {
@@ -89,7 +89,7 @@ var MaxMapChoroplethHelper = (function() {
         return props[varlabels];
     }
 
-    function getChoroplethVariable (dataset, props) {
+    var getChoroplethVariable = function(dataset, props) {
         return props[dataset.variable];
     }
 
@@ -126,7 +126,7 @@ var MaxMapChoroplethHelper = (function() {
                     var props = e.target.feature.properties;
                     if (this.dataset.category === "baseline") {
                         this.element.html("<div>"
-                                          + this[getColor(this.dataset, Math.round(this.variable(props)))]
+                                          + this[MaxMap.providers.display.getColor(this.dataset, Math.round(this.variable(props)))]
                                           + '<div class="choropleth-display-info"><strong>' + this.variable_label(props)
                                           + "</strong><p><strong style=\"font-size: 2.0em;\">"
                                           + Math.round(this.variable(props)) + "%</strong> "
@@ -134,7 +134,7 @@ var MaxMapChoroplethHelper = (function() {
                     }
                     if (this.dataset.category === "summary") {
                         this.element.html("<div>"
-                                          + this[getColor(this.dataset, Math.round(this.variable(props)))]
+                                          + this[MaxMap.providers.display.getColor(this.dataset, Math.round(this.variable(props)))]
                                           + '<div class="choropleth-display-info"><strong>' + this.variable_label(props)
                                           + "</strong><p><strong style=\"font-size: 2.0em;\">"
                                           + Math.round(this.variable(props)) + "</strong> initiatives</p></div>");
@@ -201,22 +201,22 @@ var createChoroplethTools = function(dataset) {
     };
 }
 
-function styleChoroplethRegion(dataset, region) {
+var styleChoroplethRegion = function(dataset, region) {
     var layerProps = region.feature.properties;
     var variable = parseInt(getChoroplethVariable(dataset, layerProps), 10);
-    var theColor = getColor(dataset, variable);
+    var theColor = MaxMap.providers.display.getColor(dataset, variable);
     region.setStyle({ "color": theColor });
 }
 
-function addChoroplethRegionEventHandlers(region) {
+var addChoroplethRegionEventHandlers = function(region) {
     region.on("mouseover", function(e) {
             var targets = {};
             MaxMap.providers.layers.getSummaryOverlays().map( function(summary) {
-                var poly = getLocationsForPointInDataset(e.latlng, data_obj[summary]);
+                var poly = MaxMap.providers.polygon.getLocationsForPointInDataset(e.latlng, data_obj[summary]);
                 if (poly.length) { targets[summary] = poly[0]; }
                 });
             getBaselineChoropleths().map( function(choro) {
-                var poly = getLocationsForPointInDataset(e.latlng, data_obj[choro]);
+                var poly = MaxMap.providers.polygon.getLocationsForPointInDataset(e.latlng, data_obj[choro]);
                 if (poly.length) { targets[choro] = poly[0]; }
                 });
             for (var overlay in targets) {
@@ -238,7 +238,7 @@ function addChoroplethRegionEventHandlers(region) {
                 data_obj[overlay].choroplethLegend.update();
                 });
             });
-    region.on("click", displayPopup);
+    region.on("click", MaxMap.providers.display.displayPopup);
 }
 
 return {
@@ -247,5 +247,9 @@ return {
     getStyledChoroplethLabel: getStyledChoroplethLabel,
     getChoropleths: getChoropleths,
     getBaselineChoropleths: getBaselineChoropleths,
+    styleChoroplethRegion: styleChoroplethRegion,
+    addChoroplethRegionEventHandlers: addChoroplethRegionEventHandlers,
+    getChoroplethVariableLabel: getChoroplethVariableLabel,
+    getChoroplethVariable: getChoroplethVariable,
 };
                 })();

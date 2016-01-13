@@ -1,14 +1,13 @@
 //global config/vars
-
 "use strict";
 var MaxMap = (function() {
     var providers = {};
     var shared= {
         //map, etc
-    //var data_obj, map_params, numDatasets, layerOrdering, choropleths;
-    //var queryParams;
-    //var overlayCount = 0;
-    //base_layers
+        //var data_obj, map_params, numDatasets, layerOrdering, choropleths;
+        //var queryParams;
+        //var overlayCount = 0;
+        //base_layers
         overlayCount: 0,
     };
 
@@ -30,7 +29,6 @@ var MaxMap = (function() {
         this.providers.driver.init();
     }
 
-
     return {
         providers: providers,
         shared: shared,
@@ -40,5 +38,3 @@ var MaxMap = (function() {
 })();
 
 MaxMap.init();
-
-

@@ -34,8 +34,8 @@ var MaxMapDriver = (function() {
         MaxMap.providers.data.initSharedVars();
         MaxMap.providers.choropleth.initSharedVars();
         MaxMap.providers.polygon.initSharedVars();
-
     }
+
     var init = function() {
         MaxMap.providers.data.getMapData().done(function(obj) {
             setData(obj);

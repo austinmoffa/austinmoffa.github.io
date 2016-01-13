@@ -200,8 +200,8 @@ var MaxMapDataProvider = (function() {
                     for (layer in newLayer._layers) {
                         if (newLayer._layers.hasOwnProperty(layer)) {
                             var theLayer = newLayer._layers[layer];
-                            styleChoroplethRegion(dataset, theLayer);
-                            addChoroplethRegionEventHandlers(theLayer);
+                            MaxMap.providers.choropleth.styleChoroplethRegion(dataset, theLayer);
+                            MaxMap.providers.choropleth.addChoroplethRegionEventHandlers(theLayer);
                         }
                     }
                 }
@@ -232,8 +232,8 @@ var MaxMapDataProvider = (function() {
                     newLayer = L.geoJson.css(feature);
                     newLayer.setStyle(data_obj[dataset]["style"]);
                     if (dataset.type === "choropleth") {
-                        styleChoroplethRegion(dataset, theLayer);
-                        addChoroplethRegionEventHandlers(theLayer);
+                        MaxMap.providers.choropleth.styleChoroplethRegion(dataset, theLayer);
+                        MaxMap.providers.choropleth.addChoroplethRegionEventHandlers(theLayer);
                     }
                     dataset.layer_data.addLayer(newLayer);
                 });

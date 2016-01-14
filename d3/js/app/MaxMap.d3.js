@@ -77,7 +77,7 @@ var MaxMapD3 = (function() {
             .attr("d", path(topojson.mesh(data, data.objects[geo])))
             .attr('fill', dataset.style.color)
             .attr('stroke', dataset.style.color)
-            .attr('stroke-width', dataset.style.weight)
+     //       .attr('stroke-width', dataset.style.weight)
             .attr('stroke-opacity', dataset.style.opacity)
             .attr('stroke-dasharray', dataset.style.dashArray)
             .attr('fill-opacity', dataset.style.fillOpacity);

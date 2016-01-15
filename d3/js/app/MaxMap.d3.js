@@ -40,28 +40,31 @@ var MaxMapD3 = (function() {
         scale: zoom.scale(),
     }
 
-    function zoomed() {
-        var tiles = tile
-        .scale(zoom.scale())
-        .translate(zoom.translate())
-        ();
-
-        //var offset_scale = zoom.scale() / initZoom.scale;
-        //var offset_scale = zoom.scale() / initZoom.scale;
+    var calculatePerformVectorOffset = function() {
         var offset_scale = zoom.scale() / initZoom.scale;
 
         var offset_translate = [];
         offset_translate[0] = (zoom.translate()[0] - (initZoom.translate[0] * offset_scale));
         offset_translate[1] =  (zoom.translate()[1] - (initZoom.translate[1] * offset_scale));
 
-        //var offset_scale = initZoom.scale / zoom.scale();
-
         vector
-        .attr("transform", "translate(" + offset_translate + ")scale(" + offset_scale + ")")
+        .attr("transform", "translate(" + offset_translate + ")scale(" + offset_scale + ")");
+    }
+    init = true;
+    function zoomed() {
+        var tiles = tile
+        .scale(zoom.scale())
+        .translate(zoom.translate())
+        ();
 
-        projection
-        .scale(zoom.scale() / 2 / Math.PI)
-        .translate(zoom.translate());
+        calculatePerformVectorOffset();
+
+        if (init) {
+            projection
+            .scale(zoom.scale() / 2 / Math.PI)
+            .translate(zoom.translate());
+            init = false;
+        }
 
         var image = raster
         .attr("transform", "scale(" + tiles.scale + ")translate(" + tiles.translate + ")")
@@ -103,27 +106,8 @@ var MaxMapD3 = (function() {
                .attr('fill-opacity', dataset.style.fillOpacity);
            
 
-          //  var path = d3.geo.path().projection(projection);
 
-          //  var areas = group.append("path")
-           // .attr("d", path)
-           // .attr("class", "area");
 
-            /*
-               console.log(test);
-               vector.append("path")
-               .attr("d", d3.geo.path().projection(projection)(feature));
-            /*
-            //    .attr('stroke', dataset.style.color)
-            //       .attr('stroke-width', dataset.style.weight)
-            //      .attr('stroke-opacity', dataset.style.opacity)
-            //     .attr('stroke-dasharray', dataset.style.dashArray)
-            //   .attr('fill-opacity', dataset.style.fillOpacity);
-            /* vector.append("path")
-            .datum(topojson.feature(data, data.objects[geo]))
-            .attr("d", d3.geo.path().projection(projection))
-            .attr("fill", 'black')
-            .attr("name", 'amoffa');*/
         }
     }
 

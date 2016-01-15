@@ -94,7 +94,14 @@ var MaxMapD3 = (function() {
 
             vector.append("path")
             .datum(feature)
-            .attr("d", d3.geo.path().projection(projection));
+            .attr("d", d3.geo.path().projection(projection))
+      .attr('stroke', dataset.style.color)
+      .attr('fill', dataset.style.color)
+                   .attr('stroke-width', dataset.style.weight)
+                  .attr('stroke-opacity', dataset.style.opacity)
+                 .attr('stroke-dasharray', dataset.style.dashArray)
+               .attr('fill-opacity', dataset.style.fillOpacity);
+           
 
           //  var path = d3.geo.path().projection(projection);
 

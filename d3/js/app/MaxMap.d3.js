@@ -50,7 +50,7 @@ var MaxMapD3 = (function() {
         vector
         .attr("transform", "translate(" + offset_translate + ")scale(" + offset_scale + ")");
     }
-    init = true;
+    var init = true;
     function zoomed() {
         var tiles = tile
         .scale(zoom.scale())
@@ -75,7 +75,8 @@ var MaxMapD3 = (function() {
         .remove();
 
         image.enter().append("image")
-        .attr("xlink:href", function(d) { return "http://" + ["a", "b", "c"][Math.random() * 3 | 0] + ".tile.openstreetmap.org/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+        //.attr("xlink:href", function(d) { return "http://" + ["a", "b", "c"][Math.random() * 3 | 0] + ".tile.openstreetmap.org/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+        .attr("xlink:href", function(d) { return "http://" + ["a", "b", "c"][Math.random() * 3 | 0] + ".tile.thunderforest.com/transport/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
         .attr("width", 1)
         .attr("height", 1)
         .attr("x", function(d) { return d[0]; })

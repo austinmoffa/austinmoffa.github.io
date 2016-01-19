@@ -97,11 +97,11 @@ var MaxMapD3 = (function() {
             vector.append("path")
             .datum(feature)
             .attr("d", d3_simplify(feature))
-            .attr('stroke', dataset.style.color)
+            //     .attr('stroke', dataset.style.color)
             .attr('fill', dataset.style.color)
-            .attr('stroke-width', '.5')
-            .attr('stroke-opacity', dataset.style.opacity)
-            .attr('stroke-dasharray', dataset.style.dashArray)
+            //                .attr('stroke-width', dataset.style.weight)
+            //             .attr('stroke-opacity', dataset.style.opacity)
+            //          .attr('stroke-dasharray', dataset.style.dashArray)
             .attr('fill-opacity', dataset.style.fillOpacity);
 
 
@@ -110,49 +110,25 @@ var MaxMapD3 = (function() {
         }
     }
 
-   var pushSimplifiedLineArray = function(line, path, tolerance) {
-        if(line.length > 10) {
-            line = simplify(line, tolerance);
-            for (i=0; i<line.length; i++) {
-                pathEl.pathSegList.appendItem(line[i]);
-            }
-        }
-    }
-
     var d3_simplify = function(feature) {
         var d = path(feature);
-        pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        pathEl.setAttribute('d', d);
-        var tolerance = 0.5;
-        var pathSegArray = [];
-        
-        for (var i=0; i < pathEl.pathSegList.numberOfItems; i++) {
-           pathSegArray.push(pathEl.pathSegList.getItem(i));
-        }
+        var tolerance = 1;
+        var polys = JSON.parse('[[' + d
+                               .replace(/[LM](\d+(?:\.\d+)?),(\d+(?:\.\d+)?)/g,'{"x":$1,"y":$2},')
+                               .replace(/,Z/g,'],[')
+                               .slice(0,-2)+']');
+                               var segments = [];
+                               for (var i = 0; i < polys.length; i++) {
+                                   var points = simplify(polys[i], tolerance, true);
+                                   if (points.length > 2) {
+                                       for (var j = 0; j < points.length; j++) {
+                                           points[j] = points[j].x + ',' + points[j].y;
+                                       }
+                                       segments[segments.length] = 'M'+points.join('L')+'Z';
+                                   }
+                               }
+                               d =  segments.join('');
 
-        //var newPathArray = simplify(pathSegArray, tolerance);
-       var newPathArray = pathSegArray;
-        pathEl.pathSegList.clear();
-        var lineArray = []; //fill until we hit a nonline, then restart
-        var line = true;
-        for (i=0; i<newPathArray.length; i++) {
-            if (newPathArray[i].x) {
-                newPathArray[i].x.toFixed(2);
-                newPathArray[i].y.toFixed(2);
-                line = true;
-            } else {
-                line = false;
-            }
-
-            if (line) {
-                lineArray.push(newPathArray[i]);
-            } else { //simplify lines, push new thing
-                pushSimplifiedLineArray(lineArray, pathEl, tolerance);
-                lineArray = [];
-                pathEl.pathSegList.appendItem(newPathArray[i]);
-            }
-        }
-        return pathEl.getAttribute('d');
     }
 
     return {

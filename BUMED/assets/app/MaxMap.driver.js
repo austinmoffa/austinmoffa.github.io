@@ -44,7 +44,7 @@ var MaxMapDriver = (function() {
 
             MaxMap.providers.map.configMap();
 
-            MaxMap.providers.data.processMapData('topojson');
+//            MaxMap.providers.data.processMapData('topojson');
         });
     }
     return {

@@ -3,9 +3,33 @@ body {
     margin: 0;
     font-family: 'Whitney SSm A', 'Whitney SSm B', HelveticaNeue-Light, 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Nimbus Sans L', sans-serif;
 }
-html, body, #map {
+html, body{
     height: 100%;
 }
+#map{
+    height:90%;
+}
+#map_filters{ 
+    height:10%;
+}
+
+#map_filters button{
+    cursor:pointer;
+    color:black;
+}
+
+#map_filters button:hover{
+    background-color:#f4f4f4;
+}
+
+#map_filters .selected{
+    background-color:#a4a4a4;
+}
+
+#map_filters .selected:hover{
+    background-color:#bababa;
+}
+
 a {
     text-decoration: none;
 }

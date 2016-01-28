@@ -37,7 +37,48 @@
     If you are having difficulties, please switch to a modern browser (evergreen browsers or IE 9+).
 </div>
 <![endif]-->
+
+
+<div id='map_filters' style='overflow:hidden;display:block;width:100%'>
+    <div style='float:left' class='max_map_filter_widget' id='category_1'>
+        <label>Military Category</label><br>
+        <button class='max-toggle-button' data-selected='false' data-value='army'> Army </button>
+        <button class='max-toggle-button' data-selected='false' data-value='navy'> Navy </button>
+        <button class='max-toggle-button' data-selected='false' data-value='airforce'> Airforce </button>
+    </div>
+
+    <div style='float:left' class='max_map_filter_widget' id='category_2'>
+        <label>Distance (miles)</label><br>
+        <select class='max-selector' id='category_2'>
+            <option value='10'>10</option>
+            <option value='25'>25</option>
+            <option value='50'>50</option>
+            <option value='100'>100</option>
+            <option value='200'>200</option>
+        </select>
+    </div>
+
+    <div style='float:left' class='max_map_filter_widget' id='category_3'>
+        <label>Disaster Type</label><br>
+        <button class='max-toggle-button' data-selected='false' data-value='earthquake'> Earthquake </button>
+        <button class='max-toggle-button' data-selected='false' data-value='weather'> Weather </button>
+        <button class='max-toggle-button' data-selected='false' data-value='fema'> Fema </button>
+        <button class='max-toggle-button' data-selected='false' data-value='fire_smokeplume'> Fire/Smoke Plume </button>
+    </div>
+
+    <div style='float:left' class='max_map_filter_widget' id='category_4'>
+        <label>NASR Airport</label><br>
+        <button class='max-exclusive-toggle-button' data-value='nasr_airport_off'> Off </button>
+        <button class='max-exclusive-toggle-button' data-value='nasr_airport_on'> On </button>
+    </div>
+</div>
+
+
 <div id="map"></div>
+
+
+
+
 
 <!-- Scripts -->
 <!--[if lt IE 9]>
@@ -74,6 +115,7 @@
 <script src="assets/app/MaxMap.driver.js" charset="utf-8"></script>
 <script src="assets/app/MaxMap.leaflet.js" charset="utf-8"></script>
 <script src="assets/app/MaxMap.marker.js" charset="utf-8"></script>
+<script src="assets/app/MaxMap.filter.js" charset="utf-8"></script>
 <script src="assets/app/MaxMap.config.js" charset="utf-8"></script>
 
 <!--[if lt IE 9]>

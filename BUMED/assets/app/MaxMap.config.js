@@ -20,7 +20,8 @@ var MaxMap = (function() {
             map: MaxMapLeaflet,
             polygon: MaxMapPolygonHelper,
             query: MaxMapQueryParser,
-            marker: MaxMapMarkers
+            marker: MaxMapMarkers,
+            filter: MaxMapFilter
         };
         this.providers.driver.init();
     }

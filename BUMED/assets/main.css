@@ -16,6 +16,7 @@ html, body{
 #map_filters button{
     cursor:pointer;
     color:black;
+    box-shadow: 1px 1px 2px gray;
 }
 
 #map_filters button:hover{

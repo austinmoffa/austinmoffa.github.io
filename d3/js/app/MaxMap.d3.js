@@ -1,6 +1,7 @@
 var MaxMapD3 = (function() {
     var width = Math.max(960, window.innerWidth);
     var height = Math.max(500, window.innerHeight);
+    var data_array = [];
 
     var tile = d3.geo.tile()
     .size([width, height]);
@@ -90,8 +91,13 @@ var MaxMapD3 = (function() {
 
 
     var addLayer = function(dataset) {
-        var data = dataset.layer_data;
+        data_array.push(dataset);
+        addLayerInternal(dataset);
+    }
 
+    var addLayerInternal = function(dataset) {
+        var data = dataset.layer_data;
+        console.log(dataset);
         for (geo in data.objects) {
             var feature = topojson.feature(data, data.objects[geo]);
             vector.append("path")
@@ -103,10 +109,6 @@ var MaxMapD3 = (function() {
             .attr('stroke-opacity', dataset.style.opacity)
             .attr('stroke-dasharray', dataset.style.dashArray)
             .attr('fill-opacity', dataset.style.fillOpacity);
-
-
-
-
         }
     }
 

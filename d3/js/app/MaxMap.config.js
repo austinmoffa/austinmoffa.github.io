@@ -33,4 +33,6 @@ var MaxMap = (function() {
 
 })();
 
+$("body").ready(function() {
 MaxMap.init();
+});

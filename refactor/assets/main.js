@@ -1,4 +1,4 @@
-/********************************
+/*******************************
  * Global variables/constants
  */
 var data_obj, map_params, numDatasets, layerOrdering, choropleths;
@@ -812,12 +812,14 @@ function adjustLayerTooltipDisplay(el) {
         el.css('top', (-el.height() - parseInt(el.css('top'))) + 'px');
         el.data('height-adjusted', true);
     }
+    
 }
 
 function tooltipIsNearTheBottomEdge(el) {
     var w_height = $(window).height();
     var el_offset = el.offset();
-    if (el_offset.top + el.height() > w_height) {
+    var el_height = el_offset.top + el.height() + 50; //arbitrary for margin of error
+    if (el_height > w_height) {
         return true;
     }
     return false;

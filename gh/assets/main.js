@@ -1184,10 +1184,7 @@ function create_topojson_layer(dataset) {
     if (dataset.type === "regions" || dataset.type === "points") {
         newLayer.setStyle(dataset.style);
         newLayer.options.pointToLayer = function(feature, latlng) {
-                var possible_icons = ['airforce', 'hospital', 'navy-red', 'navy-green', 'navy-orange', 'army', 'airport', 'fire', 'default'];
-                var icon_name = Math.floor(Math.random() * possible_icons.length);
-                icon_name = possible_icons[icon_name];
-
+            var icon_name = dataset.icon ? dataset.icon : 'default';
             smallIcon = CustomMarkers.getMarker(icon_name, dataset.style.color);
             return L.marker(latlng,{icon: smallIcon});
         };
